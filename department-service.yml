@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: department-config-map
+data:
+  SPRING_DATASOURCE_URL: jdbc:postgresql://everest-db.default.svc.cluster.local:5432/department
+  SPRING_DATASOURCE_USERNAME: postgres
+  SPRING_DATASOURCE_PASSWORD: postgres
+  SPRING_ZIPKIN_BASE-URL: http://everest-zipkin.default.svc.cluster.local:9411/
+  SPRING_CONFIG_IMPORT: optional:configserver:http://cloud-config-server-svc.default.svc.cluster.local
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: department-service-app
+  labels:
+    app: department-service-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: department-service-app
+  template:
+    metadata:
+      labels:
+        app: department-service-app
+    spec:
+      containers:
+        - name: department-service-app
+          image: shkumar45/everest-department:0.0.1
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8088
+          envFrom:
+            - configMapRef:
+                name: department-config-map
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: department-service-svc
+spec:
+  selector:
+    app: department-service-app
+  ports:
+  - port: 80
+    targetPort: 8088
