@@ -4,10 +4,10 @@ metadata:
   name: department-config-map
 data:
   SPRING_DATASOURCE_URL: jdbc:postgresql://everest-db.default.svc.cluster.local:5432/department
-  SPRING_DATASOURCE_USERNAME: postgres
-  SPRING_DATASOURCE_PASSWORD: postgres
-  SPRING_ZIPKIN_BASE-URL: http://everest-zipkin.default.svc.cluster.local:9411/
-  SPRING_CONFIG_IMPORT: optional:configserver:http://cloud-config-server-svc.default.svc.cluster.local
+  SPRING_DATASOURCE_USERNAME: everest_dep
+  SPRING_DATASOURCE_PASSWORD: everestpw
+  #SPRING_ZIPKIN_BASE-URL: http://everest-zipkin.default.svc.cluster.local:9411/
+  #SPRING_CONFIG_IMPORT: optional:configserver:http://cloud-config-server-svc.default.svc.cluster.local
 
 ---
 

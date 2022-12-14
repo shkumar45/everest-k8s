@@ -1,3 +1,35 @@
+# we are exposing the database running on localhost
+# we made sure postgress on local is configured to listen to all ip addresses
+apiVersion: v1
+kind: Service
+metadata:
+  name: everest-db
+spec:
+  type: ClusterIP
+  # yes, literally the word "None"
+  clusterIP: None
+  ports:
+    - name: everest-db-port
+      port: 5432
+      targetPort: 5432
+
+---
+
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: everest-db
+subsets:
+- addresses:
+  - ip: 192.168.64.1 # ---- host.minikube.internal instead of ip address should also work ----- #
+  ports:
+  - name: everest-db-port
+    port: 5432
+    protocol: TCP
+
+
+
+
 # apiVersion: v1
 # kind: ConfigMap
 # metadata:
@@ -120,27 +152,3 @@
 #   externalName: host.minikube.internal
   
 
-apiVersion: v1
-kind: Service
-metadata:
-  name: everest-db
-spec:
-  type: ClusterIP
-  # yes, literally the word "None"
-  clusterIP: None
-  ports:
-    - name: everest-db-port
-      port: 5432
-      targetPort: 5432
----
-apiVersion: v1
-kind: Endpoints
-metadata:
-  name: everest-db
-subsets:
-- addresses:
-  - ip: 192.168.64.1
-  ports:
-  - name: everest-db-port
-    port: 5432
-    protocol: TCP
